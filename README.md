@@ -41,7 +41,6 @@ For more details on these configuration variables see <https:#github.com/mikebra
 | diagnostics_log_verbosity | `null` |
 | diagnostics_retain_cover_art | `null` |
 | diagnostics_statistics | `null` |
-| discovered_interpreter_python | `"/usr/bin/python"` |
 | dsp_convolution | `null` |
 | dsp_convolution_gain | `null` |
 | dsp_convolution_ir_file | `null` |
@@ -87,7 +86,6 @@ For more details on these configuration variables see <https:#github.com/mikebra
 | metadata_socket_address | `null` |
 | metadata_socket_msglength | `null` |
 | metadata_socket_port | `null` |
-| module_setup | `true` |
 | mqtt_cafile | `null` |
 | mqtt_capath | `null` |
 | mqtt_certfile | `null` |
