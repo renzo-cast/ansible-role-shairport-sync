@@ -1,18 +1,9 @@
-# 1. check if nqptp installded or install
-- name: Check if nqptp installed
-  shell: command -v nqptp >/dev/null 2>&1
-  register: nqptp_exists
-  ignore_errors: yes
-
-- name: install nqptp
-  include_tasks: nqptp.yml
-  when: nqptp_exists.rc != 0
-
 # Install dependancies
 # sudo apt-get install build-essential git xmltoman autoconf automake libtool \
 #     libpopt-dev libconfig-dev libasound2-dev avahi-daemon libavahi-client-dev libssl-dev libsoxr-dev libglib2.0-dev \
 #     libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev
 - name: Install shairport-sync dev dependancies
+  become: yes
   apt:
     pkg:
       - build-essential
@@ -36,6 +27,16 @@
       - libavformat-dev
       - uuid-dev
       - libgcrypt-dev
+
+# 1. check if nqptp installded or install
+- name: Check if nqptp installed
+  shell: command -v nqptp >/dev/null 2>&1
+  register: nqptp_exists
+  ignore_errors: yes
+
+- name: install nqptp
+  include_tasks: nqptp.yml
+  when: nqptp_exists.rc != 0
 
 # check for ./configure script and skip running autoreconf to save time
 - name: Has autoreconf run?

@@ -17,7 +17,7 @@
   shell: autoreconf -fi
   args:
     chdir: "/tmp/nqptp"
-  when: not.nqptp_configure_file.stat.exists
+  when: not nqptp_configure_file.stat.exists
 
 # ./configure
 - name: nqptp build - configure

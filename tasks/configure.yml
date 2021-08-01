@@ -28,7 +28,7 @@
     after: 'sessioncontrol ='
     regexp: ^(\/\/)?\s*{{ item.replace('sessioncontrol_','') }}\s=\s\".+\";.*$
     replace: "	 {{ item.replace('sessioncontrol_','') }} = \"{{ lookup('vars', item) }}\";"
-    after: 'alsa ='
+    before: 'alsa ='
   when: lookup('vars', item)
   loop: "{{ lookup('varnames', '^sessioncontrol_').split(',') }}"
   become: true
@@ -41,7 +41,7 @@
     after: 'alsa ='
     regexp: ^(\/\/)?\s*{{ item.replace('alsa_','') }}\s=\s\".+\";.*$
     replace: "	 {{ item.replace('alsa_','') }} = \"{{ lookup('vars', item) }}\";"
-    after: 'sndio ='
+    before: 'sndio ='
   when: lookup('vars', item)
   loop: "{{ lookup('varnames', '^alsa_').split(',') }}"
   become: true
@@ -54,7 +54,7 @@
     after: 'sndio ='
     regexp: ^(\/\/)?\s*{{ item.replace('sndio_','') }}\s=\s\".+\";.*$
     replace: "	 {{ item.replace('sndio_','') }} = \"{{ lookup('vars', item) }}\";"
-    after: 'pa ='
+    before: 'pa ='
   when: lookup('vars', item)
   loop: "{{ lookup('varnames', '^sndio_').split(',') }}"
   become: true
@@ -67,7 +67,7 @@
     after: 'pa ='
     regexp: ^(\/\/)?\s*{{ item.replace('pa_','') }}\s=\s\".+\";.*$
     replace: "	 {{ item.replace('pa_','') }} = \"{{ lookup('vars', item) }}\";"
-    after: 'pipe ='
+    before: 'pipe ='
   when: lookup('vars', item)
   loop: "{{ lookup('varnames', '^pa_').split(',') }}"
   become: true
@@ -80,7 +80,7 @@
     after: 'pipe ='
     regexp: ^(\/\/)?\s*{{ item.replace('pipe_','') }}\s=\s\".+\";.*$
     replace: "	 {{ item.replace('pipe_','') }} = \"{{ lookup('vars', item) }}\";"
-    after: 'dsp ='
+    before: 'dsp ='
   when: lookup('vars', item)
   loop: "{{ lookup('varnames', '^pipe_').split(',') }}"
   become: true
@@ -93,7 +93,7 @@
     after: 'dsp ='
     regexp: ^(\/\/)?\s*{{ item.replace('dsp_','') }}\s=\s\".+\";.*$
     replace: "	 {{ item.replace('dsp_','') }} = \"{{ lookup('vars', item) }}\";"
-    after: 'metadata ='
+    before: 'metadata ='
   when: lookup('vars', item)
   loop: "{{ lookup('varnames', '^dsp_').split(',') }}"
   become: true
@@ -106,7 +106,7 @@
     after: 'metadata ='
     regexp: ^(\/\/)?\s*{{ item.replace('metadata_','') }}\s=\s\".+\";.*$
     replace: "	 {{ item.replace('metadata_','') }} = \"{{ lookup('vars', item) }}\";"
-    after: 'mqtt ='
+    before: 'mqtt ='
   when: lookup('vars', item)
   loop: "{{ lookup('varnames', '^metadata_').split(',') }}"
   become: true
@@ -119,7 +119,7 @@
     after: 'mqtt ='
     regexp: ^(\/\/)?\s*{{ item.replace('mqtt_','') }}\s=\s\".+\";.*$
     replace: "	 {{ item.replace('mqtt_','') }} = \"{{ lookup('vars', item) }}\";"
-    after: 'diagnostics ='
+    before: 'diagnostics ='
   when: lookup('vars', item)
   loop: "{{ lookup('varnames', '^mqtt_').split(',') }}"
   become: true

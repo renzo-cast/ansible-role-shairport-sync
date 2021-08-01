@@ -2,7 +2,7 @@
   fail:
     msg: Shairport-sync is only compatible with Linux
   when:
-    - ansible_facts['system'] == 'Linux'
+    - ansible_facts['system'] != 'Linux'
 
 # https://github.com/mikebrady/shairport-sync/blob/development/AIRPLAY2.md
 - name: AirPlay 2 is not compatible with macos

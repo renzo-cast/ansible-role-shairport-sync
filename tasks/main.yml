@@ -1,11 +1,13 @@
 - name: Check if already installed
   shell: shairport-sync -V
   register: command_check
+  failed_when: false
 
 - name: Confirm to re-install or downgrade
   pause:
     prompt: "The following version of shairport-sync in installed:\n{{ command_check.stdout }}\nAre you sure you want to continue? (yes/no)"
   register: confirmation
+  when: command_check.rc == 0
 
 - name: continue or not?
   fail:
@@ -20,6 +22,12 @@
 # sudo apt-get upgrade
 - name: update
   include_tasks: update.yml
+
+- name: Install git
+  become: yes
+  apt:
+    name: git
+    state: present
 
 # disable wifi power saving
 # sudo iwconfig wlan0 power off
@@ -36,6 +44,7 @@
       shell: which shairport-sync
       become: true
       register: command_locations
+      failed_when: false
 
     - name: Remove old shairport-sync commands
       ansible.builtin.file:
@@ -56,8 +65,8 @@
 
 # 6. REBOOT
 - name: reboot
+  become: yes
   reboot:
-  become: true
 
 # Install Shairport-sync
 # git clone https://github.com/mikebrady/shairport-sync.git
@@ -84,6 +93,7 @@
   ansible.builtin.systemd:
     name: shairport-sync
     enabled: yes
+    daemon_reload: yes # https://github.com/ansible/ansible/issues/36585
   become: true
 
 # systemctl start shairport-sync
@@ -91,4 +101,5 @@
   ansible.builtin.systemd:
     name: shairport-sync
     state: started
+    daemon_reload: yes # https://github.com/ansible/ansible/issues/36585
   become: true
