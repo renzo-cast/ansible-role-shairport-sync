@@ -60,7 +60,7 @@ For more details on these configuration variables see <https:#github.com/mikebra
 | general_mdns_backend | `null` |
 | general_missing_port_dacp_scan_interval_seconds | `null` |
 | general_mpris_service_bus | `null` |
-| general_name | `"booth"` |
+| general_name | `null` |
 | general_output_backend | `null` |
 | general_password | `null` |
 | general_playback_mode | `null` |
