@@ -1,0 +1,52 @@
+# 1. install nqptp (https://github.com/mikebrady/nqptp)
+
+# git clone https://github.com/mikebrady/nqptp.git
+- name: Git clone nqptp
+  ansible.builtin.git:
+    repo: 'https://github.com/mikebrady/nqptp.git'
+    dest: /tmp/nqptp
+
+# check for ./configure script
+- name: Has autoreconf run?
+  stat:
+    path: /tmp/nqptp/configure
+  register: nqptp_configure_file
+
+# autoreconf -fi
+- name: nqptp build - autoreconf
+  shell: autoreconf -fi
+  args:
+    chdir: "/tmp/nqptp"
+  when: not.nqptp_configure_file.stat.exists
+
+# ./configure
+- name: nqptp build - configure
+  shell: ./configure
+  args:
+    chdir: "/tmp/nqptp"
+
+# make
+- name: nqptp build - make
+  make:
+    chdir: "/tmp/nqptp"
+
+# sudo make install
+- name: nqptp build - make install
+  make:
+    chdir: "/tmp/nqptp"
+    target: install
+  become: yes
+
+# systemctl enable nqptp
+- name: systemctl enable nqptp
+  ansible.builtin.systemd:
+    name: nqptp
+    enabled: yes
+  become: true
+
+# systemctl start nqptp
+- name: systemctl start nqptp
+  ansible.builtin.systemd:
+    name: nqptp
+    state: started
+  become: true

@@ -1,0 +1,144 @@
+
+# - debug:
+#     msg: "{{ lookup('vars', item) }}"
+#   loop: "{{ query('varnames', 'general_') }}"
+
+# - name: copy config file
+#   copy:
+#     src: /tmp/shairport-sync/scripts/shairport-sync.conf
+#     dest: "{{ configuration_file_path }}"
+#     remote_src: yes
+#     force: yes # change to yes to always replace
+#   become: true
+#   tags:
+#     - configuration
+
+- name: Setting any general configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'general ='
+    regexp: ^(\/\/)?\s*{{ item.replace('general_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('general_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'sessioncontrol ='
+    backup: true
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^general_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting sessioncontrol configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'sessioncontrol ='
+    regexp: ^(\/\/)?\s*{{ item.replace('sessioncontrol_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('sessioncontrol_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'alsa ='
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^sessioncontrol_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting alsa configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'alsa ='
+    regexp: ^(\/\/)?\s*{{ item.replace('alsa_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('alsa_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'sndio ='
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^alsa_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting sndio configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'sndio ='
+    regexp: ^(\/\/)?\s*{{ item.replace('sndio_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('sndio_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'pa ='
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^sndio_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting pa configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'pa ='
+    regexp: ^(\/\/)?\s*{{ item.replace('pa_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('pa_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'pipe ='
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^pa_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting pipe configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'pipe ='
+    regexp: ^(\/\/)?\s*{{ item.replace('pipe_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('pipe_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'dsp ='
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^pipe_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting dsp configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'dsp ='
+    regexp: ^(\/\/)?\s*{{ item.replace('dsp_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('dsp_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'metadata ='
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^dsp_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting metadata configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'metadata ='
+    regexp: ^(\/\/)?\s*{{ item.replace('metadata_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('metadata_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'mqtt ='
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^metadata_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting mqtt configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'mqtt ='
+    regexp: ^(\/\/)?\s*{{ item.replace('mqtt_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('mqtt_','') }} = \"{{ lookup('vars', item) }}\";"
+    before: 'diagnostics ='
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^mqtt_').split(',') }}"
+  become: true
+  tags:
+    - configuration
+
+- name: Setting diagnostics configuration
+  replace:
+    path: "{{ configuration_file_path }}"
+    after: 'diagnostics ='
+    regexp: ^(\/\/)?\s*{{ item.replace('diagnostics_','') }}\s=\s\".+\";.*$
+    replace: "	 {{ item.replace('diagnostics_','') }} = \"{{ lookup('vars', item) }}\";"
+  when: lookup('vars', item)
+  loop: "{{ lookup('varnames', '^diagnostics_').split(',') }}"
+  become: true
+  tags:
+    - configuration

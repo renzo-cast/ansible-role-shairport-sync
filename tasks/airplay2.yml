@@ -1,0 +1,71 @@
+# 1. check if nqptp installded or install
+- name: Check if nqptp installed
+  shell: command -v nqptp >/dev/null 2>&1
+  register: nqptp_exists
+  ignore_errors: yes
+
+- name: install nqptp
+  include_tasks: nqptp.yml
+  when: nqptp_exists.rc != 0
+
+# Install dependancies
+# sudo apt-get install build-essential git xmltoman autoconf automake libtool \
+#     libpopt-dev libconfig-dev libasound2-dev avahi-daemon libavahi-client-dev libssl-dev libsoxr-dev libglib2.0-dev \
+#     libplist-dev libsodium-dev libavutil-dev libavcodec-dev libavformat-dev uuid-dev libgcrypt-dev
+- name: Install shairport-sync dev dependancies
+  apt:
+    pkg:
+      - build-essential
+      - git
+      - xmltoman
+      - autoconf
+      - automake
+      - libtool
+      - libpopt-dev
+      - libconfig-dev
+      - libasound2-dev
+      - avahi-daemon
+      - libavahi-client-dev
+      - libssl-dev
+      - libsoxr-dev
+      - libglib2.0-dev
+      - libplist-dev
+      - libsodium-dev
+      - libavutil-dev
+      - libavcodec-dev
+      - libavformat-dev
+      - uuid-dev
+      - libgcrypt-dev
+
+# check for ./configure script and skip running autoreconf to save time
+- name: Has autoreconf run?
+  stat:
+    path: /tmp/shairport-sync/configure
+  register: shairport_sync_configure_file
+
+# autoreconf -fi
+- name: shairport-sync build - autoreconf
+  shell: autoreconf -fi
+  args:
+    chdir: "/tmp/shairport-sync"
+  when: not shairport_sync_configure_file.stat.exists
+
+# ./configure --sysconfdir=/etc --with-alsa \
+#   --with-soxr --with-avahi --with-ssl=openssl --with-systemd --with-dbus-interface --with-airplay-2
+- name: shairport-sync build - configure
+  shell: ./configure --sysconfdir=/etc --with-alsa --with-soxr --with-avahi --with-ssl=openssl --with-systemd --with-dbus-interface --with-airplay-2
+  args:
+    chdir: "/tmp/shairport-sync"
+  register: configure_output
+
+# make
+- name: shairport-sync build - make
+  make:
+    chdir: "/tmp/shairport-sync"
+
+# sudo make install
+- name: shairport-sync build - make install
+  make:
+    chdir: "/tmp/shairport-sync"
+    target: install
+  become: yes

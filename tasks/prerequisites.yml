@@ -1,0 +1,24 @@
+- name: Shairport-sync is only compatible with Linux
+  fail:
+    msg: Shairport-sync is only compatible with Linux
+  when:
+    - ansible_facts['system'] == 'Linux'
+
+# https://github.com/mikebrady/shairport-sync/blob/development/AIRPLAY2.md
+- name: AirPlay 2 is not compatible with macos
+  fail:
+    msg: >
+      AirPlay 2 can't be installed on MacOS as its dependancy 'npqtp' can't be installed on MacOS\n
+      For more information see: https://github.com/mikebrady/shairport-sync/blob/development/AIRPLAY2.md
+  when:
+    - ansible_facts['distribution'] == 'MacOSX'
+    - airplay_version == 2
+
+- name: AirPlay 2 is not compatible with older versions of Debian
+  fail:
+    msg: >
+      AirPlay 2 can't be installed on Debian versions earler than "Buster" (10) due to dependancy constraints\n
+      https://github.com/mikebrady/shairport-sync/blob/development/AIRPLAY2.md
+  when:
+    - ansible_facts['distribution'] == "Debian"
+    - ansible_facts['distribution_major_version'] | int < 10
