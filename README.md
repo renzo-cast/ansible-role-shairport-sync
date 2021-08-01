@@ -70,7 +70,7 @@ For more details on these configuration variables see <https:#github.com/mikebra
 | general_resend_control_first_check_time | `null` |
 | general_resend_control_last_check_time | `null` |
 | general_resync_threshold_in_seconds | `null` |
-| general_run_this_before_play_begins | `"./home/pi/send_mqtt.py ON cmnd/booth/power"` |
+| general_run_this_before_play_begins | `null` |
 | general_run_this_when_volume_is_set | `null` |
 | general_udp_port_base | `null` |
 | general_udp_port_range | `null` |
