@@ -134,8 +134,7 @@ N/A
 ```yaml
 roles:
     - role: ansible-role-shairport-sync
-      vars:
-        general_name: booth
+
 ```
 
 ## License
